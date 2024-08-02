@@ -15,7 +15,7 @@ def scan_vuln_1(url):
     try:
         response = requests.get(url + payload, timeout=10,verify=False)
         end_time = time.time()
-        if end_time - start_time > 5 and response:
+        if end_time - start_time > 5 and response.status_code and "Burp Suite" not in response.text:
             print(f"[+] {url} is vulnerable to Vuln 1 (通天星 CMSV6 车载定位监控平台 disable SQL 注入漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 1")
@@ -34,7 +34,7 @@ def scan_vuln_2(url):
     try:
         response = requests.post(url+path, data=payload, headers=headers, timeout=10,verify=False)
         end_time = time.time()
-        if end_time - start_time > 5 and response:
+        if end_time - start_time > 5 and response.status_code and "Burp Suite" not in response.text:
             print(f"[+] {url} is vulnerable to Vuln 2 (亿赛通数据泄露防护(DLP)系统 NetSecConfigAjax SQL 注入漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 2")
@@ -65,7 +65,7 @@ def scan_vuln_4(url):
     try:
         response = requests.post(url, data=payload, headers=headers, timeout=10,verify=False)
         end_time = time.time()
-        if end_time - start_time > 5 and response:
+        if end_time - start_time > 5 and response.status_code and "Burp Suite" not in response.text:
             print(f"[+] {url} is vulnerable to Vuln 4 (亿赛通电子文档安全管理系统 NoticeAjax 接口存在 SQL 注入漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 4")
@@ -119,7 +119,7 @@ def scan_vuln_8(url):
     try:
         response = requests.get(url + payload, timeout=10,verify=False)
         end_time = time.time()
-        if end_time - start_time > 5 and response:
+        if end_time - start_time > 5 and response.status_code and "Burp Suite" not in response.text:
             print(f"[+] {url} is vulnerable to Vuln 8 (U8cloud 系统 MeasureQueryFrameAction 接口存在 SQL注入漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 8")
@@ -136,7 +136,7 @@ def scan_vuln_9(url):
     try:
         response = requests.post(url, data=payload, headers=headers, timeout=10,verify=False)
         end_time = time.time()
-        if end_time - start_time > 5 and response:
+        if end_time - start_time > 5 and response.status_code and "Burp Suite" not in response.text:
             print(f"[+] {url} is vulnerable to Vuln 9 (亿赛通数据泄露防护(DLP)系统 NoticeAjax SQL 注入漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 9")
@@ -295,7 +295,7 @@ def scan_vuln_17(url):
     try:
         response = requests.post(url + path, data=payload, headers=headers, timeout=10,verify=False)
         end_time = time.time()
-        if end_time - start_time > 3 and response:
+        if end_time - start_time > 3 and response.status_code and "Burp Suite" not in response.text:
             print(f"[+] {url} is vulnerable to Vuln 17 (泛微 e-cology9 /services/WorkPlanService 前台 SQL 注入)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 17")
@@ -387,7 +387,7 @@ def scan_vuln_24(url):
     try:
         response = requests.get(url + payload, timeout=10,verify=False)
         end_time = time.time()
-        if end_time - start_time > 5 and response:
+        if end_time - start_time > 5 and response.status_code and "Burp Suite" not in response.text:
             print(f"[+] {url} is vulnerable to Vuln 24 (SuiteCRM responseEntryPoint SQL 注入漏洞)")
         else:
             print(f"[-] {url} is not vulnerable to Vuln 24")
