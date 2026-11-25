@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+
+shallow_file=$(git rev-parse --git-path shallow)
+
+# Git supplies one line per ref, including tags and deletions.
+while read -r local_ref local_oid remote_ref remote_oid; do
+    if [ "$local_ref" = "(delete)" ]; then
+        continue
+    fi
+
+    if ! tip=$(git rev-parse --verify --quiet "${local_oid}^{commit}"); then
+        printf 'Gitleaks cannot scan %s as commit history. Push stopped.\n' "$local_ref" >&2
+        exit 1
+    fi
+
+    # A new remote ref has no base. An existing remote base can also be absent locally.
+    revisions=$tip
+    if base=$(git rev-parse --verify --quiet "${remote_oid}^{commit}" 2>/dev/null); then
+        revisions="$base..$tip"
+    fi
+
+    if [ -s "$shallow_file" ] && git rev-list "$revisions" | grep -Fxf "$shallow_file" >/dev/null; then
+        printf 'History for %s is incomplete. Fetch the missing history and retry.\n' "$remote_ref" >&2
+        exit 1
+    fi
+
+    printf 'Gitleaks scanning %s\n' "$remote_ref" >&2
+    gitleaks git --redact --verbose \
+        --log-opts="--root --full-history --diff-merges=first-parent --format=medium --no-color $revisions" . </dev/null
+done
